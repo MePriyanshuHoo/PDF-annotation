@@ -1,22 +1,36 @@
-function PDF(data){
+// import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+import React, { useState, useEffect } from 'react';
+
+
+function PDF(task) {
     // data:[<mediatype>][;base64],<data>
-    const Doc = ()=>{
-    let result = "#"
-        if(data.src.length > 0) {
-            result = data.src.slice(5);
-            console.log("got limk "+ data.src.length)
-        }
-        return(
-        (data.src.length > 0)? <>No PDF {data.src.length} *</>
-        : <div>
-                <br/> hehe
-                {/* {data.src.slice(5)} */}
-                <a href={result} target= "_blank">limk</a>
+    const [responce, gotResponce]   = useState("")
+    const API_URL = `https://api.dev.classforma.com:5010/task/task_file/get_file?field_key=menu&task_uuid=${task.task_uuid}`
+
+    
+    useEffect(() => {
+        fetch(API_URL)
+            .then((res) => res.json())
+            .then((data) => {
+                gotResponce(data.content);
+                console.log(data);
+            })
+            .catch((err) => {
+                console.log("error", err);
+            })
+        
+    }, [responce]);
+
+    const Doc = () => {
+
+        return (
+            <div>
+                render PDF here!!
             </div>
-        );
+        )
     }
     return <div>
-        <Doc/>
+        <Doc />
     </div>
 }
 export default PDF
